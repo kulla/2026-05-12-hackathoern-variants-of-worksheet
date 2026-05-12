@@ -14,7 +14,6 @@
     "preview": "bun run build && bun dist/index.html"
   },
   "dependencies": {
-    "@picocss/pico": "^2.1.1",
     "clsx": "^2.1.1",
     "es-toolkit": "^1.46.0",
     "react": "^19.2.5",
