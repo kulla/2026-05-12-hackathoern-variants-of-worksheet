@@ -14,6 +14,11 @@
 ## Layout
 - Show variants side by side in a grid.
 - Keep sections aligned: each row is one section, each column is one variant.
+- Keep the plus button in the right panel.
+- The right panel starts empty and greyed out.
+- Do not show section names.
+- Do not use borders to separate sections.
+- Use spacing/gaps to separate variants.
 
 ## Constraints
 - Keep AI and content generation fake, deterministic, and local.
