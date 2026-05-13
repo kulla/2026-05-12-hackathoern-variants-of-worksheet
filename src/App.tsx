@@ -78,7 +78,7 @@ const EASIER: Material = {
     },
     {
       kind: 'fill-gap',
-      prompt: 'Exercises 1 and 2 - Choose one answer for each.',
+      prompt: '',
       singleChoice: [
         {
           label: 'Exercise 1',
