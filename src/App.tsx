@@ -74,7 +74,17 @@ const EASIER: Material = {
   sections: [
     {
       kind: 'text',
-      body: 'Let us compare fractions step by step. A fraction has a top number and a bottom number. The bottom number tells us how big each piece is. The top number tells us how many pieces we have. If two fractions have the same bottom number, the one with the bigger top number is larger. If two fractions have the same top number, the one with the smaller bottom number is larger because the pieces are bigger. Example: 1/2 is bigger than 1/4, because half pieces are bigger than quarter pieces. Another example: 3/5 is bigger than 2/5, because both use fifths and 3 pieces are more than 2 pieces.',
+      body: `Let us compare fractions step by step.
+
+A fraction has a top number and a bottom number.
+The bottom number tells us how big each piece is.
+The top number tells us how many pieces we have.
+
+If two fractions have the same bottom number, the one with the bigger top number is larger.
+If two fractions have the same top number, the one with the smaller bottom number is larger because the pieces are bigger.
+
+Example: 1/2 is bigger than 1/4, because half pieces are bigger than quarter pieces.
+Another example: 3/5 is bigger than 2/5, because both use fifths and 3 pieces are more than 2 pieces.`,
     },
     {
       kind: 'fill-gap',
