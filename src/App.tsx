@@ -199,7 +199,7 @@ export default function App() {
             ) : (
               <div className="variant-slot empty">
                 <article
-                  className="variant ghost"
+                  className={`variant ghost ${menuOpen || isGenerating ? 'active' : ''}`}
                   aria-label="Generated variant placeholder"
                 >
                   <button
@@ -213,6 +213,51 @@ export default function App() {
                   </button>
                   <h2>Generated Variant</h2>
                   <p className="ghost-note">Variant will appear here.</p>
+
+                  {menuOpen ? (
+                    <div className="menu">
+                      <label htmlFor="prompt">Prompt</label>
+                      <textarea
+                        id="prompt"
+                        onChange={(event) => setPrompt(event.target.value)}
+                        placeholder="Describe how to adapt the worksheet..."
+                        value={prompt}
+                      />
+                      <div className="suggestions">
+                        <button
+                          onClick={() =>
+                            setPrompt('Use easy language and short sentences.')
+                          }
+                          type="button"
+                        >
+                          easy language
+                        </button>
+                        <button
+                          onClick={() => {
+                            setPrompt(
+                              'Create an easier version for learners with difficulties.',
+                            )
+                            generateEasier()
+                          }}
+                          type="button"
+                        >
+                          easier version
+                        </button>
+                      </div>
+                      <button
+                        className="generate"
+                        disabled={isGenerating}
+                        onClick={generateEasier}
+                        type="button"
+                      >
+                        Generate variant
+                      </button>
+                    </div>
+                  ) : null}
+
+                  {isGenerating ? (
+                    <p className="status">{progressText}</p>
+                  ) : null}
                 </article>
               </div>
             )}
@@ -232,7 +277,7 @@ export default function App() {
             ) : null}
           </div>
 
-          {menuOpen || isGenerating ? (
+          {hasGeneratedMaterial && (menuOpen || isGenerating) ? (
             <div
               className={`controls-tray ${menuOpen || isGenerating ? 'active' : ''}`}
             >

@@ -187,6 +187,14 @@ ol {
   margin: auto;
 }
 
+.ghost.active .plus {
+  top: 0.9rem;
+  right: 0.9rem;
+  bottom: auto;
+  left: auto;
+  margin: 0;
+}
+
 .ghost-note {
   font-size: 0.95rem;
   color: #887f73;
