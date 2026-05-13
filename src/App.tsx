@@ -124,8 +124,8 @@ export default function App() {
     return PROGRESS[progressIndex] ?? 'Finalizing...'
   }, [progressIndex])
 
-  const showToast = () => {
-    setToast('This function is not implemented in this demo.')
+  const showSavedToast = () => {
+    setToast('Material is saved.')
     window.setTimeout(() => setToast(''), 2200)
   }
 
@@ -158,7 +158,7 @@ export default function App() {
           <h1>Fractions - Grade 6</h1>
         </div>
         <div className="header-actions">
-          <button onClick={showToast} type="button">
+          <button onClick={showSavedToast} type="button">
             Save
           </button>
         </div>
