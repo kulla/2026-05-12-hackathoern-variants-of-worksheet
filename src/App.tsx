@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 type TextSection = {
   kind: 'text'
@@ -123,6 +123,13 @@ export default function App() {
     (material) => material.id !== ORIGINAL.id,
   )
   const hasGeneratedMaterial = Boolean(generatedMaterial)
+  const sectionRows = generatedMaterial
+    ? ORIGINAL.sections.map((section, index) => ({
+        key: section.kind,
+        original: section,
+        generated: generatedMaterial.sections[index] ?? section,
+      }))
+    : []
 
   const progressText = useMemo(() => {
     if (progressIndex < 0) return ''
@@ -171,32 +178,58 @@ export default function App() {
 
       <section className="workspace">
         <div className="variants-scroll">
-          <div className="variants-row">
-            <article className="variant" key={ORIGINAL.id}>
-              <h2>{ORIGINAL.label}</h2>
-              {ORIGINAL.sections.map((section) => (
-                <section
-                  className="block"
-                  key={`${ORIGINAL.id}-${section.kind}`}
-                >
-                  {renderSection(section)}
-                </section>
-              ))}
-            </article>
+          {generatedMaterial ? (
+            <div className="sections-grid" role="presentation">
+              <h2 className="variant-title">{ORIGINAL.label}</h2>
+              <h2 className="variant-title">{generatedMaterial.label}</h2>
+              <div className="add-rail" />
 
-            {generatedMaterial ? (
-              <article className="variant" key={generatedMaterial.id}>
-                <h2>{generatedMaterial.label}</h2>
-                {generatedMaterial.sections.map((section) => (
+              {sectionRows.map((row, index) => (
+                <Fragment key={`row-${row.key}`}>
+                  <section className="block" key={`${ORIGINAL.id}-${row.key}`}>
+                    {renderSection(row.original)}
+                  </section>
                   <section
                     className="block"
-                    key={`${generatedMaterial.id}-${section.kind}`}
+                    key={`${generatedMaterial.id}-${row.key}`}
+                  >
+                    {renderSection(row.generated)}
+                  </section>
+                  {index === 0 ? (
+                    <div className="add-rail" key="add-rail-main">
+                      <button
+                        aria-expanded={menuOpen}
+                        aria-label="Create variant"
+                        className="plus"
+                        onClick={() => setMenuOpen((open) => !open)}
+                        type="button"
+                      >
+                        +
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className="add-rail spacer"
+                      key={`add-rail-spacer-${row.key}`}
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </div>
+          ) : (
+            <div className="variants-row">
+              <article className="variant" key={ORIGINAL.id}>
+                <h2>{ORIGINAL.label}</h2>
+                {ORIGINAL.sections.map((section) => (
+                  <section
+                    className="block"
+                    key={`${ORIGINAL.id}-${section.kind}`}
                   >
                     {renderSection(section)}
                   </section>
                 ))}
               </article>
-            ) : (
+
               <div className="variant-slot empty">
                 <article
                   className={`variant ghost ${menuOpen || isGenerating ? 'active' : ''}`}
@@ -260,22 +293,8 @@ export default function App() {
                   ) : null}
                 </article>
               </div>
-            )}
-
-            {hasGeneratedMaterial ? (
-              <div className="add-rail">
-                <button
-                  aria-expanded={menuOpen}
-                  aria-label="Create variant"
-                  className="plus"
-                  onClick={() => setMenuOpen((open) => !open)}
-                  type="button"
-                >
-                  +
-                </button>
-              </div>
-            ) : null}
-          </div>
+            </div>
+          )}
 
           {hasGeneratedMaterial && (menuOpen || isGenerating) ? (
             <div
