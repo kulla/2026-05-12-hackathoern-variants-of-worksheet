@@ -96,11 +96,11 @@ const EASIER: Material = {
     },
     {
       kind: 'multiple-choice',
-      question: 'Exercise 2 - Choose the bigger one in each pair.',
+      question: 'Exercise 3 - Easy subtasks: choose the bigger fraction.',
       pairs: [
-        { left: '2/5', right: '3/5', correct: 'right' },
-        { left: '3/4', right: '5/8', correct: 'left' },
-        { left: '1/3', right: '2/7', correct: 'left' },
+        { left: '1/3', right: '1/2', correct: 'right' },
+        { left: '2/6', right: '4/6', correct: 'right' },
+        { left: '3/8', right: '2/8', correct: 'left' },
       ],
     },
   ],
