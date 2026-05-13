@@ -184,33 +184,20 @@ export default function App() {
               ))}
             </article>
 
-            <div
-              className={`variant-slot ${menuOpen || isGenerating ? 'active' : ''} ${hasGeneratedMaterial ? '' : 'empty'}`}
-            >
-              {generatedMaterial ? (
-                <>
-                  <button
-                    aria-expanded={menuOpen}
-                    aria-label="Create variant"
-                    className="plus"
-                    onClick={() => setMenuOpen((open) => !open)}
-                    type="button"
+            {generatedMaterial ? (
+              <article className="variant" key={generatedMaterial.id}>
+                <h2>{generatedMaterial.label}</h2>
+                {generatedMaterial.sections.map((section) => (
+                  <section
+                    className="block"
+                    key={`${generatedMaterial.id}-${section.kind}`}
                   >
-                    +
-                  </button>
-                  <article className="variant" key={generatedMaterial.id}>
-                    <h2>{generatedMaterial.label}</h2>
-                    {generatedMaterial.sections.map((section) => (
-                      <section
-                        className="block"
-                        key={`${generatedMaterial.id}-${section.kind}`}
-                      >
-                        {renderSection(section)}
-                      </section>
-                    ))}
-                  </article>
-                </>
-              ) : (
+                    {renderSection(section)}
+                  </section>
+                ))}
+              </article>
+            ) : (
+              <div className="variant-slot empty">
                 <article
                   className="variant ghost"
                   aria-label="Generated variant placeholder"
@@ -227,8 +214,28 @@ export default function App() {
                   <h2>Generated Variant</h2>
                   <p className="ghost-note">Variant will appear here.</p>
                 </article>
-              )}
+              </div>
+            )}
 
+            {hasGeneratedMaterial ? (
+              <div className="add-rail">
+                <button
+                  aria-expanded={menuOpen}
+                  aria-label="Create variant"
+                  className="plus"
+                  onClick={() => setMenuOpen((open) => !open)}
+                  type="button"
+                >
+                  +
+                </button>
+              </div>
+            ) : null}
+          </div>
+
+          {menuOpen || isGenerating ? (
+            <div
+              className={`controls-tray ${menuOpen || isGenerating ? 'active' : ''}`}
+            >
               {menuOpen ? (
                 <div className="menu">
                   <label htmlFor="prompt">Prompt</label>
@@ -272,7 +279,7 @@ export default function App() {
 
               {isGenerating ? <p className="status">{progressText}</p> : null}
             </div>
-          </div>
+          ) : null}
         </div>
       </section>
 
