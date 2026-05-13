@@ -119,6 +119,11 @@ export default function App() {
   const [progressIndex, setProgressIndex] = useState(-1)
   const [toast, setToast] = useState('')
 
+  const generatedMaterial = materials.find(
+    (material) => material.id !== ORIGINAL.id,
+  )
+  const hasGeneratedMaterial = Boolean(generatedMaterial)
+
   const progressText = useMemo(() => {
     if (progressIndex < 0) return ''
     return PROGRESS[progressIndex] ?? 'Finalizing...'
@@ -167,78 +172,108 @@ export default function App() {
       <section className="workspace">
         <div className="variants-scroll">
           <div className="variants-row">
-            {materials.map((material) => (
-              <article className="variant" key={material.id}>
-                <h2>{material.label}</h2>
-                {material.sections.map((section) => (
-                  <section
-                    className="block"
-                    key={`${material.id}-${section.kind}`}
+            <article className="variant" key={ORIGINAL.id}>
+              <h2>{ORIGINAL.label}</h2>
+              {ORIGINAL.sections.map((section) => (
+                <section
+                  className="block"
+                  key={`${ORIGINAL.id}-${section.kind}`}
+                >
+                  {renderSection(section)}
+                </section>
+              ))}
+            </article>
+
+            <div
+              className={`variant-slot ${menuOpen || isGenerating ? 'active' : ''} ${hasGeneratedMaterial ? '' : 'empty'}`}
+            >
+              {generatedMaterial ? (
+                <>
+                  <button
+                    aria-expanded={menuOpen}
+                    aria-label="Create variant"
+                    className="plus"
+                    onClick={() => setMenuOpen((open) => !open)}
+                    type="button"
                   >
-                    {renderSection(section)}
-                  </section>
-                ))}
-              </article>
-            ))}
+                    +
+                  </button>
+                  <article className="variant" key={generatedMaterial.id}>
+                    <h2>{generatedMaterial.label}</h2>
+                    {generatedMaterial.sections.map((section) => (
+                      <section
+                        className="block"
+                        key={`${generatedMaterial.id}-${section.kind}`}
+                      >
+                        {renderSection(section)}
+                      </section>
+                    ))}
+                  </article>
+                </>
+              ) : (
+                <article
+                  className="variant ghost"
+                  aria-label="Generated variant placeholder"
+                >
+                  <button
+                    aria-expanded={menuOpen}
+                    aria-label="Create variant"
+                    className="plus"
+                    onClick={() => setMenuOpen((open) => !open)}
+                    type="button"
+                  >
+                    +
+                  </button>
+                  <h2>Generated Variant</h2>
+                  <p className="ghost-note">Variant will appear here.</p>
+                </article>
+              )}
+
+              {menuOpen ? (
+                <div className="menu">
+                  <label htmlFor="prompt">Prompt</label>
+                  <textarea
+                    id="prompt"
+                    onChange={(event) => setPrompt(event.target.value)}
+                    placeholder="Describe how to adapt the worksheet..."
+                    value={prompt}
+                  />
+                  <div className="suggestions">
+                    <button
+                      onClick={() =>
+                        setPrompt('Use easy language and short sentences.')
+                      }
+                      type="button"
+                    >
+                      easy language
+                    </button>
+                    <button
+                      onClick={() => {
+                        setPrompt(
+                          'Create an easier version for learners with difficulties.',
+                        )
+                        generateEasier()
+                      }}
+                      type="button"
+                    >
+                      easier version
+                    </button>
+                  </div>
+                  <button
+                    className="generate"
+                    disabled={isGenerating}
+                    onClick={generateEasier}
+                    type="button"
+                  >
+                    Generate variant
+                  </button>
+                </div>
+              ) : null}
+
+              {isGenerating ? <p className="status">{progressText}</p> : null}
+            </div>
           </div>
         </div>
-
-        <aside
-          className={`right-panel ${menuOpen || isGenerating ? 'active' : ''}`}
-        >
-          <button
-            aria-expanded={menuOpen}
-            aria-label="Create variant"
-            className="plus"
-            onClick={() => setMenuOpen((open) => !open)}
-            type="button"
-          >
-            +
-          </button>
-
-          {menuOpen ? (
-            <div className="menu">
-              <label htmlFor="prompt">Prompt</label>
-              <textarea
-                id="prompt"
-                onChange={(event) => setPrompt(event.target.value)}
-                placeholder="Describe how to adapt the worksheet..."
-                value={prompt}
-              />
-              <div className="suggestions">
-                <button
-                  onClick={() =>
-                    setPrompt('Use easy language and short sentences.')
-                  }
-                  type="button"
-                >
-                  easy language
-                </button>
-                <button
-                  onClick={() => {
-                    setPrompt(
-                      'Create an easier version for learners with difficulties.',
-                    )
-                    generateEasier()
-                  }}
-                  type="button"
-                >
-                  easier version
-                </button>
-              </div>
-              <button
-                className="generate"
-                disabled={isGenerating}
-                onClick={generateEasier}
-                type="button"
-              >
-                Generate variant
-              </button>
-            </div>
-          ) : null}
-
-          {isGenerating ? <p className="status">{progressText}</p> : null}
-        </aside>
       </section>
 
       {toast ? <div className="toast">{toast}</div> : null}

@@ -76,10 +76,6 @@ textarea {
 }
 
 .workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 19rem;
-  gap: 1rem;
-  align-items: start;
   margin-top: 1rem;
 }
 
@@ -101,6 +97,24 @@ textarea {
   padding: 1rem;
   background: var(--paper);
   border: 1px solid var(--line);
+  border-radius: 0.8rem;
+}
+
+.variant-slot {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  width: 26rem;
+  min-width: 26rem;
+}
+
+.variant-slot.empty {
+  height: 100%;
+}
+
+.variant-slot.active {
+  padding: 0.7rem;
+  background: rgba(222, 219, 212, 0.55);
   border-radius: 0.8rem;
 }
 
@@ -144,22 +158,6 @@ ol {
   color: var(--accent);
 }
 
-.right-panel {
-  position: sticky;
-  top: 1rem;
-  display: grid;
-  gap: 0.8rem;
-  align-content: start;
-  min-height: 26rem;
-  padding: 0.85rem;
-  background: var(--panel-off);
-  border-radius: 0.8rem;
-}
-
-.right-panel.active {
-  background: #ece7dc;
-}
-
 .plus {
   justify-self: end;
   width: 3rem;
@@ -171,6 +169,26 @@ ol {
   background: linear-gradient(145deg, #145d6a, #1a7685);
   border: none;
   border-radius: 999px;
+}
+
+.ghost {
+  position: relative;
+  height: 100%;
+  color: #9a9285;
+  background: linear-gradient(180deg, #ece8df 0%, #e4dfd4 100%);
+  border: 1px dashed #c8beae;
+}
+
+.ghost .plus {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.ghost-note {
+  font-size: 0.95rem;
+  color: #887f73;
+  text-align: center;
 }
 
 .menu {
@@ -228,16 +246,12 @@ ol {
 }
 
 @media (max-width: 960px) {
-  .workspace {
-    grid-template-columns: 1fr;
-  }
-
-  .right-panel {
-    position: static;
-    min-height: 10rem;
-  }
-
   .variant {
     width: min(26rem, calc(100vw - 2.4rem));
+  }
+
+  .variant-slot {
+    width: min(26rem, calc(100vw - 2.4rem));
+    min-width: min(26rem, calc(100vw - 2.4rem));
   }
 }
