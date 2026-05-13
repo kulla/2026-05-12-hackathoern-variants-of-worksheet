@@ -135,6 +135,10 @@ textarea {
   border-radius: 0.8rem;
 }
 
+.preview-only {
+  margin: 0 auto;
+}
+
 .variant-slot {
   display: grid;
   width: 26rem;

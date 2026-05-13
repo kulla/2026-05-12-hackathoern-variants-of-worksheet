@@ -209,11 +209,16 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [progressIndex, setProgressIndex] = useState(-1)
   const [toast, setToast] = useState('')
+  const [previewMaterialId, setPreviewMaterialId] = useState<string | null>(
+    null,
+  )
 
   const generatedMaterial = materials.find(
     (material) => material.id !== ORIGINAL.id,
   )
   const hasGeneratedMaterial = Boolean(generatedMaterial)
+  const previewMaterial =
+    materials.find((material) => material.id === previewMaterialId) ?? null
   const sectionRows = generatedMaterial
     ? ORIGINAL.sections.map((section, index) => ({
         key: section.kind,
@@ -253,6 +258,15 @@ export default function App() {
     }, 1900)
   }
 
+  const openPreview = (materialId: string) => {
+    setPreviewMaterialId(materialId)
+    setMenuOpen(false)
+  }
+
+  const closePreview = () => {
+    setPreviewMaterialId(null)
+  }
+
   return (
     <main className="app">
       <header className="header">
@@ -276,17 +290,51 @@ export default function App() {
 
       <section className="workspace">
         <div className="variants-scroll">
-          {generatedMaterial ? (
+          {previewMaterial ? (
+            <article
+              className="variant preview-only"
+              key={`preview-${previewMaterial.id}`}
+            >
+              <div className="title-with-preview">
+                <h2>{previewMaterial.label} Preview</h2>
+                <button
+                  className="preview-button"
+                  onClick={closePreview}
+                  type="button"
+                >
+                  Back
+                </button>
+              </div>
+              {previewMaterial.sections.map((section) => (
+                <section
+                  className="block"
+                  contentEditable
+                  suppressContentEditableWarning
+                  key={`preview-${previewMaterial.id}-${section.kind}`}
+                >
+                  {renderSection(section)}
+                </section>
+              ))}
+            </article>
+          ) : generatedMaterial ? (
             <div className="sections-grid" role="presentation">
               <div className="title-with-preview">
                 <h2 className="variant-title">{ORIGINAL.label}</h2>
-                <button className="preview-button" type="button">
+                <button
+                  className="preview-button"
+                  onClick={() => openPreview(ORIGINAL.id)}
+                  type="button"
+                >
                   Preview
                 </button>
               </div>
               <div className="title-with-preview">
                 <h2 className="variant-title">{generatedMaterial.label}</h2>
-                <button className="preview-button" type="button">
+                <button
+                  className="preview-button"
+                  onClick={() => openPreview(generatedMaterial.id)}
+                  type="button"
+                >
                   Preview
                 </button>
               </div>
@@ -336,7 +384,11 @@ export default function App() {
               <article className="variant" key={ORIGINAL.id}>
                 <div className="title-with-preview">
                   <h2>{ORIGINAL.label}</h2>
-                  <button className="preview-button" type="button">
+                  <button
+                    className="preview-button"
+                    onClick={() => openPreview(ORIGINAL.id)}
+                    type="button"
+                  >
                     Preview
                   </button>
                 </div>
@@ -420,7 +472,9 @@ export default function App() {
             </div>
           )}
 
-          {hasGeneratedMaterial && (menuOpen || isGenerating) ? (
+          {hasGeneratedMaterial &&
+          !previewMaterial &&
+          (menuOpen || isGenerating) ? (
             <div
               className={`controls-tray ${menuOpen || isGenerating ? 'active' : ''}`}
             >
