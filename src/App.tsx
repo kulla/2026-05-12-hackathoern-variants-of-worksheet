@@ -277,6 +277,8 @@ export default function App() {
           </div>
         </div>
         <div className="header-actions">
+          <button type="button">Export</button>
+          <button type="button">Share</button>
           <button
             className="save-button"
             onClick={showSavedToast}
