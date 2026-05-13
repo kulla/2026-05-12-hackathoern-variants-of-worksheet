@@ -261,8 +261,13 @@ export default function App() {
           <h1>Fractions - Grade 6</h1>
         </div>
         <div className="header-actions">
-          <button onClick={showSavedToast} type="button">
-            Save
+          <button
+            className="save-button"
+            onClick={showSavedToast}
+            type="button"
+          >
+            <span aria-hidden="true">💾</span>
+            <span>Save</span>
           </button>
         </div>
       </header>

@@ -75,6 +75,12 @@ textarea {
   border-radius: 0.5rem;
 }
 
+.save-button {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
 .workspace {
   margin-top: 1rem;
 }
