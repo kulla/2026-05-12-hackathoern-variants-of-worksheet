@@ -161,12 +161,6 @@ export default function App() {
           <button onClick={showToast} type="button">
             Save
           </button>
-          <button onClick={showToast} type="button">
-            Export
-          </button>
-          <button onClick={showToast} type="button">
-            Share
-          </button>
         </div>
       </header>
 
