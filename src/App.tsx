@@ -14,6 +14,7 @@ type FillGapSection = {
     answer: '<' | '>' | '='
   }[]
   singleChoice?: {
+    label: string
     question: string
     options: [string, string]
     correctIndex: number
@@ -77,14 +78,16 @@ const EASIER: Material = {
     },
     {
       kind: 'fill-gap',
-      prompt: 'Exercise 1 - Choose one answer.',
+      prompt: 'Exercises 1 and 2 - Choose one answer for each.',
       singleChoice: [
         {
+          label: 'Exercise 1',
           question: 'Which fraction is bigger?',
           options: ['1/2', '1/4'],
           correctIndex: 0,
         },
         {
+          label: 'Exercise 2',
           question: 'Which fraction is bigger?',
           options: ['2/5', '3/5'],
           correctIndex: 1,
@@ -132,9 +135,10 @@ function renderSection(section: Section) {
       return (
         <div className="exercise">
           <p className="exercise-prompt">{section.prompt}</p>
-          <ol className="choice-pairs" type="A">
+          <ol className="choice-pairs grouped-choices" type="A">
             {section.singleChoice.map((item) => (
               <li key={`${item.question}-${item.options.join('-')}`}>
+                <span className="exercise-subtitle">{item.label}</span>
                 <span>{item.question}</span>
                 <span className={item.correctIndex === 0 ? 'correct' : ''}>
                   {renderFraction(item.options[0])}

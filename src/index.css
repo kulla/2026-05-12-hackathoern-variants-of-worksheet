@@ -195,6 +195,16 @@ textarea {
   align-items: center;
 }
 
+.grouped-choices li {
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
+
+.exercise-subtitle {
+  width: 100%;
+  font-weight: 700;
+}
+
 .answer-box {
   font-weight: 700;
   letter-spacing: 0.02em;
