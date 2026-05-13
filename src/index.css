@@ -307,9 +307,18 @@ ol {
 .generate {
   padding: 0.4rem 0.6rem;
   cursor: pointer;
+  border-radius: 0.45rem;
+}
+
+.suggestions button {
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 0.45rem;
+}
+
+.generate {
+  color: #fff;
+  background: linear-gradient(145deg, #145d6a, #1a7685);
+  border: none;
 }
 
 .generate:disabled {
