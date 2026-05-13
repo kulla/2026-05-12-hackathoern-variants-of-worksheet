@@ -277,11 +277,18 @@ export default function App() {
 
               {sectionRows.map((row, index) => (
                 <Fragment key={`row-${row.key}`}>
-                  <section className="block" key={`${ORIGINAL.id}-${row.key}`}>
+                  <section
+                    className="block"
+                    contentEditable
+                    suppressContentEditableWarning
+                    key={`${ORIGINAL.id}-${row.key}`}
+                  >
                     {renderSection(row.original)}
                   </section>
                   <section
                     className="block"
+                    contentEditable
+                    suppressContentEditableWarning
                     key={`${generatedMaterial.id}-${row.key}`}
                   >
                     {renderSection(row.generated)}
@@ -314,6 +321,8 @@ export default function App() {
                 {ORIGINAL.sections.map((section) => (
                   <section
                     className="block"
+                    contentEditable
+                    suppressContentEditableWarning
                     key={`${ORIGINAL.id}-${section.kind}`}
                   >
                     {renderSection(section)}
