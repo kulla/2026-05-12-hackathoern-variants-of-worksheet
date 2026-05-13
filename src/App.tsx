@@ -8,15 +8,26 @@ type TextSection = {
 type FillGapSection = {
   kind: 'fill-gap'
   prompt: string
-  sentence: string
-  answer: string
+  comparisons?: {
+    left: string
+    right: string
+    answer: '<' | '>' | '='
+  }[]
+  singleChoice?: {
+    question: string
+    options: [string, string]
+    correctIndex: number
+  }[]
 }
 
 type MultipleChoiceSection = {
   kind: 'multiple-choice'
   question: string
-  options: string[]
-  correctIndex: number
+  pairs: {
+    left: string
+    right: string
+    correct: 'left' | 'right'
+  }[]
 }
 
 type Section = TextSection | FillGapSection | MultipleChoiceSection
@@ -33,19 +44,25 @@ const ORIGINAL: Material = {
   sections: [
     {
       kind: 'text',
-      body: 'Fractions show parts of a whole. In 3/5, the top number shows how many parts are taken, and the bottom number shows how many equal parts the whole has.',
+      body: 'Comparing Fractions: Fractions can have different numerators and denominators. To compare them, think about the size of each piece and how many pieces are taken. Example: 1/2 > 1/4 because halves are larger than quarters.',
     },
     {
       kind: 'fill-gap',
-      prompt: 'Fill in the gap:',
-      sentence: 'The fraction 4/6 means 4 parts out of ____ equal parts.',
-      answer: '6',
+      prompt: 'Exercise 1 - Write <, >, or =.',
+      comparisons: [
+        { left: '1/2', right: '3/6', answer: '=' },
+        { left: '2/3', right: '3/4', answer: '<' },
+        { left: '5/8', right: '1/2', answer: '>' },
+      ],
     },
     {
       kind: 'multiple-choice',
-      question: 'Which fraction is equal to one half?',
-      options: ['2/4', '2/3', '3/5', '4/5'],
-      correctIndex: 0,
+      question: 'Exercise 2 - Circle the larger fraction in each pair.',
+      pairs: [
+        { left: '2/5', right: '3/5', correct: 'right' },
+        { left: '3/4', right: '5/8', correct: 'left' },
+        { left: '1/3', right: '2/7', correct: 'left' },
+      ],
     },
   ],
 }
@@ -56,19 +73,32 @@ const EASIER: Material = {
   sections: [
     {
       kind: 'text',
-      body: 'A fraction tells us about equal parts. In 3/5, the 3 means we take 3 parts. The 5 means the whole has 5 equal parts.',
+      body: 'Let us compare fractions step by step. A fraction has a top number and a bottom number. The bottom number tells us how big each piece is. The top number tells us how many pieces we have. If two fractions have the same bottom number, the one with the bigger top number is larger. If two fractions have the same top number, the one with the smaller bottom number is larger because the pieces are bigger. Example: 1/2 is bigger than 1/4, because half pieces are bigger than quarter pieces. Another example: 3/5 is bigger than 2/5, because both use fifths and 3 pieces are more than 2 pieces.',
     },
     {
       kind: 'fill-gap',
-      prompt: 'Fill in one number:',
-      sentence: 'In 2/7, the whole has ____ equal parts.',
-      answer: '7',
+      prompt: 'Exercise 1 - Choose one answer.',
+      singleChoice: [
+        {
+          question: 'Which fraction is bigger?',
+          options: ['1/2', '1/4'],
+          correctIndex: 0,
+        },
+        {
+          question: 'Which fraction is bigger?',
+          options: ['2/5', '3/5'],
+          correctIndex: 1,
+        },
+      ],
     },
     {
       kind: 'multiple-choice',
-      question: 'Which one is one half?',
-      options: ['1/2', '1/3', '1/4'],
-      correctIndex: 0,
+      question: 'Exercise 2 - Choose the bigger one in each pair.',
+      pairs: [
+        { left: '2/5', right: '3/5', correct: 'right' },
+        { left: '3/4', right: '5/8', correct: 'left' },
+        { left: '1/3', right: '2/7', correct: 'left' },
+      ],
     },
   ],
 }
@@ -79,17 +109,61 @@ const PROGRESS = [
   'Building adapted variant...',
 ]
 
+function renderFraction(value: string) {
+  const [numerator, denominator] = value.split('/')
+  if (!numerator || !denominator) return <span>{value}</span>
+
+  return (
+    <span className="fraction">
+      <span>{numerator}</span>
+      <span className="fraction-line" />
+      <span>{denominator}</span>
+    </span>
+  )
+}
+
 function renderSection(section: Section) {
   if (section.kind === 'text') {
     return <p className="section-text">{section.body}</p>
   }
 
   if (section.kind === 'fill-gap') {
+    if (section.singleChoice) {
+      return (
+        <div className="exercise">
+          <p className="exercise-prompt">{section.prompt}</p>
+          <ol className="choice-pairs" type="A">
+            {section.singleChoice.map((item) => (
+              <li key={`${item.question}-${item.options.join('-')}`}>
+                <span>{item.question}</span>
+                <span className={item.correctIndex === 0 ? 'correct' : ''}>
+                  {renderFraction(item.options[0])}
+                </span>
+                <span className="or-text">or</span>
+                <span className={item.correctIndex === 1 ? 'correct' : ''}>
+                  {renderFraction(item.options[1])}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+
     return (
       <div className="exercise">
         <p className="exercise-prompt">{section.prompt}</p>
-        <p>{section.sentence}</p>
-        <p className="exercise-answer">Answer: {section.answer}</p>
+        <ol className="comparison-list">
+          {section.comparisons?.map((item) => (
+            <li key={`${item.left}-${item.right}`}>
+              {renderFraction(item.left)}
+              <span className="answer-box" aria-hidden="true">
+                □
+              </span>
+              {renderFraction(item.right)}
+            </li>
+          ))}
+        </ol>
       </div>
     )
   }
@@ -97,13 +171,16 @@ function renderSection(section: Section) {
   return (
     <div className="exercise">
       <p className="exercise-prompt">{section.question}</p>
-      <ol type="A">
-        {section.options.map((option, index) => (
-          <li
-            key={option}
-            className={index === section.correctIndex ? 'correct' : ''}
-          >
-            {option}
+      <ol className="choice-pairs" type="A">
+        {section.pairs.map((pair) => (
+          <li key={`${pair.left}-${pair.right}`}>
+            <span className={pair.correct === 'left' ? 'correct' : ''}>
+              {renderFraction(pair.left)}
+            </span>
+            <span className="or-text">or</span>
+            <span className={pair.correct === 'right' ? 'correct' : ''}>
+              {renderFraction(pair.right)}
+            </span>
           </li>
         ))}
       </ol>

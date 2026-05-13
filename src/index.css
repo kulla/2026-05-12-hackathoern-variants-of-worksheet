@@ -166,6 +166,44 @@ textarea {
   color: var(--muted);
 }
 
+.fraction {
+  display: inline-grid;
+  grid-template-rows: auto 1px auto;
+  justify-items: center;
+  min-width: 1.8rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.fraction-line {
+  width: 100%;
+  background: currentColor;
+}
+
+.comparison-list,
+.choice-pairs {
+  display: grid;
+  gap: 0.55rem;
+  padding-left: 1.4rem;
+  margin: 0;
+}
+
+.comparison-list li,
+.choice-pairs li {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.answer-box {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.or-text {
+  color: var(--muted);
+}
+
 ol {
   display: grid;
   gap: 0.35rem;
