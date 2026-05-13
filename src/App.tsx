@@ -229,7 +229,7 @@ export default function App() {
 
   const showSavedToast = () => {
     setToast('Material is saved.')
-    window.setTimeout(() => setToast(''), 2200)
+    window.setTimeout(() => setToast(''), 2000)
   }
 
   const generateEasier = () => {
