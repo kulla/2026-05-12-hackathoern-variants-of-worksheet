@@ -109,6 +109,22 @@ textarea {
   font-size: 1.12rem;
 }
 
+.title-with-preview {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.preview-button {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+}
+
 .variant {
   display: grid;
   gap: 0.9rem;

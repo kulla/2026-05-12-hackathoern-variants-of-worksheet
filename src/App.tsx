@@ -258,7 +258,9 @@ export default function App() {
       <header className="header">
         <div>
           <p className="eyebrow">Worksheet Prototype</p>
-          <h1>Fractions - Grade 6</h1>
+          <div className="title-with-preview">
+            <h1>Fractions - Grade 6</h1>
+          </div>
         </div>
         <div className="header-actions">
           <button
@@ -276,8 +278,18 @@ export default function App() {
         <div className="variants-scroll">
           {generatedMaterial ? (
             <div className="sections-grid" role="presentation">
-              <h2 className="variant-title">{ORIGINAL.label}</h2>
-              <h2 className="variant-title">{generatedMaterial.label}</h2>
+              <div className="title-with-preview">
+                <h2 className="variant-title">{ORIGINAL.label}</h2>
+                <button className="preview-button" type="button">
+                  Preview
+                </button>
+              </div>
+              <div className="title-with-preview">
+                <h2 className="variant-title">{generatedMaterial.label}</h2>
+                <button className="preview-button" type="button">
+                  Preview
+                </button>
+              </div>
               <div className="add-rail" />
 
               {sectionRows.map((row, index) => (
@@ -322,7 +334,12 @@ export default function App() {
           ) : (
             <div className="variants-row">
               <article className="variant" key={ORIGINAL.id}>
-                <h2>{ORIGINAL.label}</h2>
+                <div className="title-with-preview">
+                  <h2>{ORIGINAL.label}</h2>
+                  <button className="preview-button" type="button">
+                    Preview
+                  </button>
+                </div>
                 {ORIGINAL.sections.map((section) => (
                   <section
                     className="block"
@@ -349,7 +366,9 @@ export default function App() {
                   >
                     +
                   </button>
-                  <h2>Generated Variant</h2>
+                  <div className="title-with-preview">
+                    <h2>Generated Variant</h2>
+                  </div>
                   <p className="ghost-note">Variant will appear here.</p>
 
                   {menuOpen ? (
